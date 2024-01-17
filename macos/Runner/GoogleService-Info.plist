@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyA2HF3C22JlvOm-QR0wCFjVEyIqo-0jUHM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>851722716180</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.feline.levitate.RunnerTests</string>
+	<key>PROJECT_ID</key>
+	<string>fran-e8add</string>
+	<key>STORAGE_BUCKET</key>
+	<string>fran-e8add.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:851722716180:ios:3c7c5f18f8643ee1be9301</string>
+</dict>
+</plist>

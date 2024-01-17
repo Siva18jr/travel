@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "851722716180",
+    "project_id": "fran-e8add",
+    "storage_bucket": "fran-e8add.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:851722716180:android:8bc00bc7da241127be9301",
+        "android_client_info": {
+          "package_name": "com.feline.levitate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8qRS2v3_fF8TvJ0LXiH9d_HUxIpcDWUw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
