@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 class CustomWidgets{
 
-  Widget productContainer({required Color zerothColor, required Color firstColor, required Widget child}){
+  Widget placesContainer({required Color zerothColor, required Color firstColor, required Widget child}){
 
     return Container(
-        padding: const EdgeInsets.all(5),
+        padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
             color: zerothColor,
             borderRadius: const BorderRadius.all(
@@ -39,6 +39,54 @@ class CustomWidgets{
           )
       ),
       child: child,
+    );
+
+  }
+
+  Widget budgetTotalCountTile({
+    required String title,
+    required String count,
+    required double screenWidth,
+    Color txtColor = AppColors.greyColor100,
+    bool divide = true
+  }){
+
+    return Padding(
+        padding: const EdgeInsets.symmetric(
+            horizontal: 8
+        ),
+        child: Column(
+            children: <Widget>[
+              ListTile(
+                  visualDensity: const VisualDensity(
+                      vertical: -4
+                  ),
+                  title: Text(
+                    title,
+                    style: TextStyle(
+                        fontSize: 13,
+                        color: txtColor
+                    ),
+                  ),
+                  trailing: Text(
+                      count,
+                      style: TextStyle(
+                          fontSize: 13,
+                          color: txtColor
+                      )
+                  )
+              ),
+              divide == true ?
+              SizedBox(
+                width: screenWidth - 55,
+                child: const Divider(
+                  thickness: 1,
+                  color: AppColors.greyColor100,
+                ),
+              ) :
+              const SizedBox()
+            ]
+        )
     );
 
   }

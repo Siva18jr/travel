@@ -70,12 +70,34 @@ class Utils{
 
     return ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.green,
             content: Text(
                 message
             )
         )
     );
+
+  }
+
+  static String convertDateFormat(String dateTime){
+
+    try{
+
+      final List<String> formatSplit = dateTime.split('-');
+
+      if(formatSplit[1].length != 2){
+
+        formatSplit[1] = '0${formatSplit[1]}';
+
+      }
+
+      return '${formatSplit[2]}-${formatSplit[1]}-${formatSplit[0]}';
+
+    }on Exception catch (e){
+
+      return e.toString();
+
+    }
 
   }
 

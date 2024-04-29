@@ -41,34 +41,42 @@ class CustomButtons{
 
   }
 
-  Widget bookNowButton({bool isResponsive = false, required String text, double width = 120}){
+  Widget bookNowButton({
+    bool isResponsive = false,
+    required String text,
+    double width = 120,
+    required Function onPressed
+  }){
 
     return Flexible(
-      child: Container(
-        width: isResponsive ? double.maxFinite : width,
-        height: 60,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: AppColors.violetCustomized,
-        ),
-        child: Row(
-          mainAxisAlignment: isResponsive
-              ? MainAxisAlignment.spaceBetween
-              : MainAxisAlignment.center,
-          children: [
-            const SizedBox(
-              width: 5,
-            ),
-            Text(
-              text,
-              style: const TextStyle(
-                color: AppColors.whiteColor,
+      child: InkWell(
+        onTap: ()=> onPressed(),
+        child: Container(
+          width: isResponsive ? double.maxFinite : width,
+          height: 60,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: AppColors.violetCustomized,
+          ),
+          child: Row(
+            mainAxisAlignment: isResponsive
+                ? MainAxisAlignment.spaceBetween
+                : MainAxisAlignment.center,
+            children: [
+              const SizedBox(
+                width: 5,
               ),
-            ),
-            Image.asset(
-                "assets/images/swipe.png"
-            )
-          ],
+              Text(
+                text,
+                style: const TextStyle(
+                  color: AppColors.whiteColor,
+                ),
+              ),
+              Image.asset(
+                  "assets/images/swipe.png"
+              )
+            ],
+          ),
         ),
       ),
     );

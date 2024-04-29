@@ -14,5 +14,11 @@ class RoutesName{
   static const String myFavouritesActivity = 'my_favourites';
   static const String placeDetailActivity = 'place_detail_activity';
   static const String categoryDataActivity = 'category_data_activity';
+  static const String gMapRouteActivity = 'google_map_direction_activity';
+  static const String bookingActivity = 'booking_activity';
+  static const String userLocationActivity = 'user_current_location_activity';
+  static const String bookedActivity = 'booked_activity';
+  static const String bookingHistoryActivity = 'booking_history_activity';
+  static const String budgetPredictionActivity = 'budget_prediction_activity';
 
 }

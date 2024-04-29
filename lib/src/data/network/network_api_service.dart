@@ -44,13 +44,32 @@ class NetworkApiService extends BaseApiService{
   }
 
   @override
-  Future<QuerySnapshot<Map<String,dynamic>>> getSelectedApiResponse(String path, String getBy) async {
+  Future<QuerySnapshot<Map<String,dynamic>>> getSelectedApiResponse(String searchBy, String path, String getBy) async {
 
     try{
 
-      dynamic response = await FirebaseFirestore.instance.collection(path).where("category", isEqualTo: getBy).get().timeout(
+      dynamic response = await FirebaseFirestore.instance.collection(path).where(searchBy, isEqualTo: getBy).get().timeout(
           const Duration(seconds: 10)
       );
+      return response;
+
+    }on SocketDirection{
+
+      throw FetchDataException('No internet connection');
+
+    }
+
+  }
+
+  @override
+  Future getPostWithKeyApiResponse(String path, String key, data) async {
+
+    try{
+
+      final response = await FirebaseFirestore.instance.collection(path).doc(key).set(data).timeout(
+          const Duration(seconds: 10)
+      );
+
       return response;
 
     }on SocketDirection{

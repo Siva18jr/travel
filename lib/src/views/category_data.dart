@@ -80,7 +80,7 @@ class _CategoryDataState extends State<CategoryData> {
                                 ),
                                 InkWell(
                                   onTap: () => Navigator.pushNamed(context, RoutesName.placeDetailActivity, arguments: value.placeDataList.data![index]),
-                                  child: _widgets.productContainer(
+                                  child: _widgets.placesContainer(
                                       zerothColor: AppColors.greyColor,
                                       firstColor: AppColors.whiteColor,
                                       child: Row(

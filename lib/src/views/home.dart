@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:levitate/src/data/response/status.dart';
@@ -5,12 +7,12 @@ import 'package:levitate/src/model/provider_state/home_provider.dart';
 import 'package:levitate/src/res/colors/color.dart';
 import 'package:levitate/src/res/components/home_navigation_drawer.dart';
 import 'package:levitate/src/res/components/widgets/custom_widgets.dart';
-import 'package:levitate/src/res/data_urls/local_keys.dart';
 import 'package:levitate/src/utils/routes/routes_name.dart';
 import 'package:levitate/src/utils/utils.dart';
 import 'package:levitate/src/view_model/category_view_model.dart';
-import 'package:levitate/src/view_model/local_data_view_model.dart';
+import 'package:levitate/src/view_model/hotels_view_model.dart';
 import 'package:levitate/src/view_model/places_view_model.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -23,18 +25,18 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-  final LocalDataViewModel _localDataViewModel = LocalDataViewModel();
   final PlacesViewModel _placesViewModel = PlacesViewModel();
   final CategoryViewModel _categoryViewModel = CategoryViewModel();
   final CustomWidgets _widgets = CustomWidgets();
+  final HotelsViewModel _hotelsViewModel = HotelsViewModel();
 
   @override
   void initState() {
 
     super.initState();
     _placesViewModel.fetchPlaceDataList();
-    _categoryViewModel.fetchPlaceDataList();
-    _localDataViewModel.fetchBoolDataList(LocalKeys.localLoginBoolKey);
+    _categoryViewModel.fetchCategoryDataList();
+    _hotelsViewModel.fetchHotelsDataList();
 
   }
 
@@ -62,40 +64,38 @@ class _HomeState extends State<Home> {
                ),
              ),
              actions: [
-               InkWell(
-                 onTap: () => Navigator.pushNamed(context, RoutesName.notificationActivity),
-                 child: const Icon(
-                   Icons.notification_important,
-                   color: AppColors.whiteColor,
-                 ),
-               ),
-               Padding(
+               // InkWell(
+               //   onTap: () => Navigator.pushNamed(context, RoutesName.notificationActivity),
+               //   child: const Icon(
+               //     Icons.notification_important,
+               //     color: AppColors.whiteColor,
+               //   ),
+               // ),
+                Padding(
                  padding: const EdgeInsets.only(
                      left: 8,
                      right: 8
                  ),
-                 child: ChangeNotifierProvider<LocalDataViewModel>(
-                   create: (BuildContext context) => _localDataViewModel,
-                   child: Consumer<LocalDataViewModel>(
-                     builder: (context, value, child){
-
-                       return InkWell(
-                           onTap: () => bool.parse(value.loginBoolData.data.toString()) == true ?
-                           Navigator.pushNamed(context, RoutesName.myFavouritesActivity) :
-                           Navigator.pushNamed(context, RoutesName.loginActivity),
-                           child: const Icon(
-                             Icons.favorite,
-                             color: AppColors.loveRed,
-                           )
-                       );
-
-                     },
+                 child: InkWell(
+                   onTap: ()=> Navigator.pushNamed(context, RoutesName.myFavouritesActivity),
+                   child: const Icon(
+                     Icons.favorite,
+                     color: AppColors.loveRed,
                    ),
                  ),
                )
              ],
            ),
-           body: SizedBox(
+           body: LiquidPullToRefresh(
+             showChildOpacityTransition: true,
+             backgroundColor: AppColors.whiteColor,
+             color: AppColors.appPrimaryColor,
+             onRefresh: () async {
+
+               _placesViewModel.fetchPlaceDataList();
+               _categoryViewModel.fetchCategoryDataList();
+
+             },
              child: SingleChildScrollView(
                child: Column(
                  mainAxisSize: MainAxisSize.min,
@@ -168,7 +168,7 @@ class _HomeState extends State<Home> {
                                      scrollDirection: Axis.horizontal,
                                      itemCount: imgPath.length,
                                      itemBuilder: (context, index){
-
+             
                                        return Padding(
                                          padding: const EdgeInsets.fromLTRB(5, 2, 5, 5),
                                          child: SizedBox(
@@ -231,7 +231,7 @@ class _HomeState extends State<Home> {
                                              // )
                                          ),
                                        );
-
+             
                                      }
                                  ),
                                ),
@@ -251,14 +251,14 @@ class _HomeState extends State<Home> {
                        create: (BuildContext context) => _categoryViewModel,
                        child: Consumer<CategoryViewModel>(
                            builder: (context, value, _){
-
+             
                              switch(value.categoryDataList.status){
-
+             
                                case Status.LOADING:
                                  return const Center(
                                    child: CircularProgressIndicator(),
                                  );
-
+             
                                case Status.COMPLETED:
                                  return Padding(
                                    padding: const EdgeInsets.only(
@@ -275,7 +275,7 @@ class _HomeState extends State<Home> {
                                        ),
                                        itemCount: value.categoryDataList.data!.length,
                                        itemBuilder: (context, index){
-
+             
                                          return Container(
                                            decoration: BoxDecoration(
                                                color: AppColors.whiteColor,
@@ -296,21 +296,21 @@ class _HomeState extends State<Home> {
                                                      child: CachedNetworkImage(
                                                          imageUrl: value.categoryDataList.data![index].imgUrl.toString(),
                                                          imageBuilder: (context, imageProvider){
-
+             
                                                            return CircleAvatar(
                                                              backgroundImage: imageProvider,
                                                            );
-
+             
                                                          },
                                                          placeholder: (context, url){
-
+             
                                                            return Center(
                                                                child: LoadingAnimationWidget.inkDrop(
                                                                    color: AppColors.denimBlueColor,
                                                                    size: 23
                                                                )
                                                            );
-
+             
                                                          },
                                                          errorWidget: (context, url, error) => const Icon(
                                                              Icons.error
@@ -329,22 +329,22 @@ class _HomeState extends State<Home> {
                                              ),
                                            ),
                                          );
-
+             
                                        },
                                      ),
                                    ),
                                  );
-
+             
                                case Status.ERROR:
                                  return Text(
                                      value.categoryDataList.message.toString()
                                  );
-
+             
                                default:
                                  return Container();
-
+             
                              }
-
+             
                            }
                        )
                    ),
@@ -358,21 +358,22 @@ class _HomeState extends State<Home> {
                          create: (BuildContext context) => _placesViewModel,
                          child: Consumer<PlacesViewModel>(
                            builder: (context, value, _){
-
+             
                              switch(value.placeDataList.status){
-
+             
                                case Status.LOADING:
                                  return const Center(
                                    child: CircularProgressIndicator(),
                                  );
-
+             
                                case Status.COMPLETED:
+                                 log(value.placeDataList.data.toString());
                                  return ListView.builder(
                                      shrinkWrap: true,
                                      physics: const NeverScrollableScrollPhysics(),
                                      itemCount: value.placeDataList.data!.length,
                                      itemBuilder: (context, index){
-
+             
                                        return Column(
                                          children: [
                                            const SizedBox(
@@ -380,7 +381,7 @@ class _HomeState extends State<Home> {
                                            ),
                                            InkWell(
                                              onTap: () => Navigator.pushNamed(context, RoutesName.placeDetailActivity, arguments: value.placeDataList.data![index]),
-                                             child: _widgets.productContainer(
+                                             child: _widgets.placesContainer(
                                                  zerothColor: AppColors.greyColor,
                                                  firstColor: AppColors.whiteColor,
                                                  child: Row(
@@ -393,14 +394,14 @@ class _HomeState extends State<Home> {
                                                        child: CachedNetworkImage(
                                                            imageUrl: value.placeDataList.data![index].imgUrl.toString(),
                                                            placeholder: (context, url){
-
+             
                                                              return Center(
                                                                  child: LoadingAnimationWidget.inkDrop(
                                                                      color: AppColors.denimBlueColor,
                                                                      size: 23
                                                                  )
                                                              );
-
+             
                                                            },
                                                            errorWidget: (context, url, error) => const Icon(
                                                                Icons.error
@@ -439,20 +440,20 @@ class _HomeState extends State<Home> {
                                            ),
                                          ],
                                        );
-
+             
                                      }
                                  );
-
+             
                                case Status.ERROR:
                                  return Text(
                                      value.placeDataList.message.toString()
                                  );
-
+             
                                default:
                                  return Container();
-
+             
                              }
-
+             
                            },
                          )
                      ),

@@ -10,12 +10,21 @@ class PlacesViewModel with ChangeNotifier{
   final _myRepo = PlacesRepository();
 
   ApiResponse<List<PlacesModel>> _placeDataList = ApiResponse.loading();
+  int _selectedIndex = -1;
 
   ApiResponse<List<PlacesModel>> get placeDataList => _placeDataList;
+  int get selectedIndex => _selectedIndex;
 
   _setPlaceDataList(ApiResponse<List<PlacesModel>> data){
 
     _placeDataList = data;
+    notifyListeners();
+
+  }
+
+  setSelectedIndex(int value){
+
+    _selectedIndex = value;
     notifyListeners();
 
   }
@@ -25,8 +34,6 @@ class PlacesViewModel with ChangeNotifier{
     _setPlaceDataList(ApiResponse.loading());
 
     _myRepo.fetchPlacesData().then((value){
-
-      log(value.toString());
 
       _setPlaceDataList(ApiResponse.completed(value));
 

@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:hive/hive.dart';
+import 'package:levitate/src/data/app_exceptions.dart';
 import 'package:levitate/src/data/local/base_api_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -124,6 +128,24 @@ class NetworkLocalService extends BaseLocalService{
     }
 
     return data;
+
+  }
+
+  @override
+  Future getDBPostApiResponse(String boxName, String key, dynamic value) async {
+
+    final hiveBox = Hive.box(boxName);
+
+    try{
+
+      final response = await hiveBox.put(key, value).timeout(const Duration(seconds: 10));
+      return response;
+
+    }on PathAccessException{
+
+      throw FetchDataException('Access not Granted');
+
+    }
 
   }
 

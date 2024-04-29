@@ -129,8 +129,8 @@ class _HomeNavigationDrawerState extends State<HomeNavigationDrawer> {
                     ),
                   ),
                   _bodyTile(
-                      heading: 'My Visits',
-                      onPressed: () => Navigator.pushNamed(context, RoutesName.myOrdersActivity)
+                      heading: 'Booking Info',
+                      onPressed: () => Navigator.pushNamed(context, RoutesName.bookingHistoryActivity)
                   ),
                   _bodyTile(
                       heading: 'Share with friends',

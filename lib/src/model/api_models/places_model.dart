@@ -1,4 +1,5 @@
 class PlacesModel {
+
   String? id;
   String? category;
   String? city;
@@ -8,19 +9,23 @@ class PlacesModel {
   String? place;
   String? price;
   String? title;
+  String? coordinates;
 
-  PlacesModel(
-      {this.id,
-        this.category,
-        this.city,
-        this.country,
-        this.description,
-        this.imgUrl,
-        this.place,
-        this.price,
-        this.title});
+  PlacesModel({
+    this.id,
+    this.category,
+    this.city,
+    this.country,
+    this.description,
+    this.imgUrl,
+    this.place,
+    this.price,
+    this.title,
+    this.coordinates
+  });
 
-  PlacesModel.fromJson(Map<String, dynamic> json) {
+  PlacesModel.fromJson(Map<dynamic, dynamic> json) {
+
     id = json['id'];
     category = json['category'];
     city = json['city'];
@@ -30,19 +35,25 @@ class PlacesModel {
     place = json['place'];
     price = json['price'];
     title = json['title'];
+    coordinates = json['coordinates'];
+
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['category'] = this.category;
-    data['city'] = this.city;
-    data['country'] = this.country;
-    data['description'] = this.description;
-    data['img_url'] = this.imgUrl;
-    data['place'] = this.place;
-    data['price'] = this.price;
-    data['title'] = this.title;
+
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['category'] = category;
+    data['city'] = city;
+    data['country'] = country;
+    data['description'] = description;
+    data['img_url'] = imgUrl;
+    data['place'] = place;
+    data['price'] = price;
+    data['title'] = title;
+    data['coordinates'] = coordinates;
     return data;
+
   }
+
 }

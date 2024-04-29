@@ -16,4 +16,6 @@ abstract class BaseLocalService{
 
   Future<dynamic> getObjectListData(String getKey);
 
+  Future<dynamic> getDBPostApiResponse(String boxName, String key, dynamic value);
+
 }

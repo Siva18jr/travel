@@ -11,24 +11,24 @@ class CategoryViewModel with ChangeNotifier{
 
   ApiResponse<List<CategoryModel>> get categoryDataList => _categoryDataList;
 
-  _setPlaceDataList(ApiResponse<List<CategoryModel>> data){
+  _setCategoryDataList(ApiResponse<List<CategoryModel>> data){
 
     _categoryDataList = data;
     notifyListeners();
 
   }
 
-  Future<void> fetchPlaceDataList() async{
+  Future<void> fetchCategoryDataList() async{
 
-    _setPlaceDataList(ApiResponse.loading());
+    _setCategoryDataList(ApiResponse.loading());
 
     _myRepo.fetchPlacesData().then((value){
 
-      _setPlaceDataList(ApiResponse.completed(value));
+      _setCategoryDataList(ApiResponse.completed(value));
 
     }).onError((error, stackTrace){
 
-      _setPlaceDataList(ApiResponse.error(error.toString()));
+      _setCategoryDataList(ApiResponse.error(error.toString()));
 
     });
 
