@@ -150,7 +150,8 @@ class Routes{
         return MaterialPageRoute(
             builder: (BuildContext context) => BudgetPrediction(
               distance: args[0],
-              hotel: args[1]
+              hotelCount: args[1],
+              hotel: args[2]
             )
         );
 

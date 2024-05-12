@@ -85,7 +85,7 @@ class _BookingState extends State<Booking> {
   Widget build(BuildContext context) {
 
     final List<PriceItem> priceItems = [
-      PriceItem(name: widget.hotel, quantity: int.parse(widget.peoples), itemCostCents:  int.parse(widget.bookingAmount) * 100),
+      PriceItem(name: widget.hotel, quantity: int.parse(widget.peoples), itemCostCents: int.parse(widget.bookingAmount) * 100),
       PriceItem(name: 'Agent Fee', quantity: 1,  itemCostCents: 8500),
     ];
 

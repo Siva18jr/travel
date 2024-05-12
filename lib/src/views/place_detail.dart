@@ -49,27 +49,25 @@ class _PlaceDetailState extends State<PlaceDetail> {
 
   }
 
-  void calculateDistance(LatLng start, LatLng end) {
+   String calculateDistance(LatLng start, LatLng end) {
 
     const double earthRadius = 6371.0; // Radius of the Earth in kilometers
 
-    // Convert coordinates to radians
     final double lat1 = start.latitude * (pi / 180.0);
     final double lon1 = start.longitude * (pi / 180.0);
     final double lat2 = end.latitude * (pi / 180.0);
     final double lon2 = end.longitude * (pi / 180.0);
 
-    // Calculate the differences between the coordinates
     final double dLat = lat2 - lat1;
     final double dLon = lon2 - lon1;
 
-    // Apply the Haversine formula
-    final double a = sin(dLat / 2) * sin(dLat / 2) +
-        cos(lat1) * cos(lat2) * sin(dLon / 2) * sin(dLon / 2);
+    final double a = sin(dLat / 2) * sin(dLat / 2) + cos(lat1) * cos(lat2) * sin(dLon / 2) * sin(dLon / 2);
     final double c = 2 * atan2(sqrt(a), sqrt(1 - a));
     final double distance = earthRadius * c;
 
-    dev.log(distance.toString());// Distance in kilometers, add "*1000" to get meters
+    dev.log(distance.toString());
+
+    return distance.toString();
 
   }
 
@@ -80,10 +78,7 @@ class _PlaceDetailState extends State<PlaceDetail> {
     final double screenWidth = Utils.getActivityScreenWidth(context);
     List coordinates = widget.item.coordinates.toString().split(",");
 
-    double distanceInMeters = Geolocator.distanceBetween(12.97194, 77.59369, double.parse(coordinates[0]), double.parse(coordinates[1]));
-
-    dev.log('s = $distanceInMeters');
-    calculateDistance(const LatLng(12.97194, 77.59369), LatLng(double.parse(coordinates[0]), double.parse(coordinates[1])));
+    // double distanceInMeters = Geolocator.distanceBetween(12.97194, 77.59369, double.parse(coordinates[0]), double.parse(coordinates[1]));
 
     return Consumer<PlaceDetailsProvider>(
       builder: (context, globalValue, _){
@@ -130,9 +125,10 @@ class _PlaceDetailState extends State<PlaceDetail> {
 
                             },
                             errorWidget: (context, url, error) => const Icon(
-                                Icons.error
-                            ),
-                          ),
+                                Icons.error,
+                              color: AppColors.redColor
+                            )
+                          )
                         )
                     ),
                     Positioned(
@@ -165,8 +161,8 @@ class _PlaceDetailState extends State<PlaceDetail> {
                                         color: AppColors.blackColor54.withOpacity(0.8),
                                         fontSize: 26,
                                         fontWeight: FontWeight.bold
-                                    ),
-                                  ),
+                                    )
+                                  )
                                 ),
                                 Text(
                                   widget.item.price.toString(),
@@ -174,33 +170,33 @@ class _PlaceDetailState extends State<PlaceDetail> {
                                       color: AppColors.blackColor54,
                                       fontSize: 23,
                                       fontWeight: FontWeight.bold
-                                  ),
+                                  )
                                 )
-                              ],
+                              ]
                             ),
                             const SizedBox(
-                              height: 10,
+                              height: 10
                             ),
                             Row(
                                 children: [
                                   const Icon(
                                     Icons.location_on,
-                                    color: AppColors.lightViolet,
+                                    color: AppColors.lightViolet
                                   ),
                                   const SizedBox(
-                                    height: 5,
+                                    height: 5
                                   ),
                                   Text(
                                     "${widget.item.place},${widget.item.city}",
                                     style: const TextStyle(
                                         fontSize: 16,
                                         color: AppColors.blackColor54
-                                    ),
-                                  ),
+                                    )
+                                  )
                                 ]
                             ),
                             const SizedBox(
-                              height: 30,
+                              height: 30
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -218,9 +214,9 @@ class _PlaceDetailState extends State<PlaceDetail> {
 
                                       final DateTime? picked = await showDatePicker(
                                         context: context,
-                                        initialDate: DateTime.now().add(const Duration(days: 1)), // Refer step 1
+                                        initialDate: DateTime.now().add(const Duration(days: 1)),
                                         firstDate: DateTime.now().add(const Duration(days: 1)),
-                                        lastDate: DateTime.now().add(const Duration(days: 28)),
+                                        lastDate: DateTime.now().add(const Duration(days: 28))
                                       );
                                       if (picked != null){
 
@@ -235,7 +231,7 @@ class _PlaceDetailState extends State<PlaceDetail> {
                                       Icons.date_range,
                                       color: globalValue.selectedDate == '' ?
                                           AppColors.redColor : AppColors.greenColor
-                                    ),
+                                    )
                                   )
                                 ]
                             ),
@@ -389,29 +385,25 @@ class _PlaceDetailState extends State<PlaceDetail> {
                     child: const Icon(
                       Icons.directions
                     ),
-                    onTap: () async {
+                    onTap: () async => await Geolocator.requestPermission().then((value){
 
-                      await Geolocator.requestPermission().then((value){
+                      Navigator.pushNamed(context, RoutesName.userLocationActivity, arguments: <String>[coordinates[0], coordinates[1]]);
 
-                        Navigator.pushNamed(context, RoutesName.userLocationActivity, arguments: <String>[coordinates[0], coordinates[1]]);
+                    }).onError((error, stackTrace){
 
-                      }).onError((error, stackTrace){
+                      dev.log(error.toString());
 
-                        dev.log(error.toString());
-
-                      });
-
-                    }
+                    })
                   ),
                   SpeedDialChild(
-                    onTap: (){
-
-                      int min = 800, max = 1200;
-                      int randomNumber = int.parse((min + Random().nextInt(max - min)).toString());
-
-                      Navigator.pushNamed(context, RoutesName.budgetPredictionActivity, arguments: <String>[distanceInMeters.toString(), randomNumber.toString()]);
-
-                    },
+                    onTap: ()=> globalValue.selectedIndex == -1 || globalValue.selectedHotelPrice == -1 ?
+                    Utils.flushBarMessage(
+                        title: 'Pending',
+                        message: 'Please select the hotel booking info',
+                        context: context,
+                        bgColor: AppColors.redColor
+                    ) :
+                    Navigator.pushNamed(context, RoutesName.budgetPredictionActivity, arguments: <String>[calculateDistance(const LatLng(12.97194, 77.59369), LatLng(double.parse(coordinates[0]), double.parse(coordinates[1]))), (globalValue.selectedIndex + 1).toString(), globalValue.totalAmount.toString()]),
                     child: const Icon(
                       Icons.account_balance_wallet_outlined
                     )

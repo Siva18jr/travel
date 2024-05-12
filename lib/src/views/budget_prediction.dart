@@ -9,9 +9,10 @@ import 'package:provider/provider.dart';
 class BudgetPrediction extends StatefulWidget {
 
   final String distance;
+  final String hotelCount;
   final String hotel;
 
-  const BudgetPrediction({super.key, required this.distance, required this.hotel});
+  const BudgetPrediction({super.key, required this.distance, required this.hotelCount, required this.hotel});
 
   @override
   State<BudgetPrediction> createState() => _BudgetPredictionState();
@@ -45,7 +46,7 @@ class _BudgetPredictionState extends State<BudgetPrediction> {
                 ),
                 _widgets.budgetTotalCountTile(
                     title: 'Hotel',
-                    count: widget.hotel,
+                    count: '${widget.hotelCount} X ${widget.hotel}',
                     screenWidth: screenWidth
                 ),
                 _widgets.budgetTotalCountTile(
@@ -55,7 +56,7 @@ class _BudgetPredictionState extends State<BudgetPrediction> {
                 ),
                 _widgets.budgetTotalCountTile(
                     title: 'Total',
-                    count: value.totalBudget.toString(),
+                    count: double.parse(value.totalBudget.toString()).toStringAsFixed(2),
                     screenWidth: screenWidth
                 )
               ]
